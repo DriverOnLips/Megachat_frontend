@@ -3,8 +3,11 @@ import { useEffect, useState } from 'react';
 import './Footer.css';
 import { sendMessage } from '../../utils/sendMessage/sendMessage';
 import Modal from '../UI/modal/Modal';
+import { useApp } from '../../hooks/useApp';
 
 const Footer = () => {
+  const { username } = useApp();
+
   const [messageText, setMessageText] = useState<string>('');
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -26,7 +29,11 @@ const Footer = () => {
       <footer id='footer'>
         <div className='footer__left'>
           <img
-            src='./src/assets/img/no_username.svg'
+            src={
+              username
+                ? './src/assets/img/username_done.svg'
+                : './src/assets/img/no_username.svg'
+            }
             className='footer__user-img'
             onClick={() => setModalOpen(true)}
           />

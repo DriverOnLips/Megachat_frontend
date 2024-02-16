@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import './Modal.css';
+import { useApp } from '../../../hooks/useApp';
 
 interface ModalProps {
   isOpen: boolean;
@@ -8,6 +9,10 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
+  const { username, setUsername } = useApp();
+
+  const [usernameInput, setUsernameInput] = useState<string>(username);
+
   if (!isOpen) {
     return <></>;
   }
@@ -28,6 +33,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           <input
             className='modal__text-input text-base1-medium'
             placeholder={'Username'}
+            value={usernameInput}
+            onChange={(event) => setUsernameInput(event.target.value)}
           />
           <div className='modal__text-line' />
         </div>
@@ -35,8 +42,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           <button
             className='modal__controls-cansel text-base2-medium'
             onClick={(event) => {
-              onClose();
               event.stopPropagation();
+              onClose();
             }}
           >
             Отменить
@@ -44,8 +51,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose }) => {
           <button
             className='modal__controls-save text-base2-medium'
             onClick={(event) => {
-              onClose();
               event.stopPropagation();
+              setUsername(usernameInput);
+              onClose();
             }}
           >
             Сохранить
