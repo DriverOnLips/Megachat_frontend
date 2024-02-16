@@ -22,3 +22,7 @@
 .header__content img {
   width: 50px;
 }
+
+.header__content-span {
+  color: white;
+}

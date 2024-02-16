@@ -1,8 +1,11 @@
 #main {
-  height: calc(100%-110px);
+  height: calc(100vh - 60px - 50px);
   width: 100%;
   padding-top: 60px;
 }
 
 #messenger_history {
+  height: 100%;
+  width: 100%;
+  background-image: url(../../assets/img/background.svg);
 }
