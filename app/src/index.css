@@ -15,6 +15,16 @@ body {
   padding: 0;
 }
 
+.text-base1-bold {
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.text-base3-bold {
+  font-size: 15px;
+  font-weight: 600;
+}
+
 .text-base1-medium {
   font-size: 23px;
   font-weight: 400;
@@ -22,5 +32,10 @@ body {
 
 .text-base2-medium {
   font-size: 19px;
+  font-weight: 400;
+}
+
+.text-base3-medium {
+  font-size: 15px;
   font-weight: 400;
 }
