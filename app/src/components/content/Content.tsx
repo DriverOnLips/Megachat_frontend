@@ -12,9 +12,10 @@ const Content = () => {
       username: 'Romanlock',
       time: new Date().getTime(),
       payload: {
-        data: 'Привет',
+        data: 'ПриветПриветПриветПриветПриветПриветПривет',
         status: 'ok',
         message: '',
+        fromMe: Boolean(Math.round(Math.random())),
       },
     };
     setMessages([...messages, message]);
