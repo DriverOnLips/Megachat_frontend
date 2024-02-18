@@ -21,6 +21,7 @@ const Content = () => {
 
     return () => {
       webSocketManager.removeListener(handleMessage);
+      webSocketManager.disconnect();
     };
   }, []);
 
@@ -38,8 +39,6 @@ const Content = () => {
 
     webSocketManager.send(message);
   };
-
-  useEffect(() => {}, [messages]);
 
   return (
     <main id='main'>
