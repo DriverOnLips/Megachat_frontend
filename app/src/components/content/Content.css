@@ -1,0 +1,14 @@
+#main {
+  height: calc(100vh - 60px - 50px);
+  width: 100%;
+  padding-top: 60px;
+}
+
+#messenger_history {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-image: url(../../assets/img/background.svg);
+  gap: 0.5rem;
+}
