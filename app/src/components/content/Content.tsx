@@ -3,11 +3,28 @@ import { useEffect, useState } from 'react';
 import './Content.css';
 import { MessageStruct } from '../../structures/structures';
 import Message from '../UI/message/Message';
+import { WebSocketManager } from '../../utils/websocket/webSocket';
 
 const Content = () => {
   const [messages, setMessages] = useState<Array<MessageStruct>>([]);
 
-  const addMessage = () => {
+  const webSocketManager = new WebSocketManager();
+
+  useEffect(() => {
+    webSocketManager.connect('ws://');
+
+    const handleMessage = (data: MessageStruct) => {
+      setMessages([...messages, data]);
+    };
+
+    webSocketManager.addListener(handleMessage);
+
+    return () => {
+      webSocketManager.removeListener(handleMessage);
+    };
+  }, []);
+
+  const sendMessage = () => {
     const message: MessageStruct = {
       username: 'Romanlock',
       time: new Date().getTime(),
@@ -18,14 +35,15 @@ const Content = () => {
         fromMe: Boolean(Math.round(Math.random())),
       },
     };
-    setMessages([...messages, message]);
+
+    webSocketManager.send(message);
   };
 
   useEffect(() => {}, [messages]);
 
   return (
     <main id='main'>
-      <button onClick={addMessage} />
+      <button onClick={sendMessage} />
       <div id='messenger_history'>
         {messages.map((message: MessageStruct, index: number) => (
           <Message
