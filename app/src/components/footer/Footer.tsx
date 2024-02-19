@@ -14,11 +14,28 @@ const Footer = () => {
   const sendMessageHandler = () => {
     if (!messageText) return;
 
-    sendMessage(messageText);
+    if (!username) {
+      setModalOpen(true);
+      return;
+    }
+
+    sendMessage(username, messageText);
     setMessageText('');
   };
 
   useEffect(() => {}, [messageText, isModalOpen]);
+
+  const handleInputEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key != 'Enter' || !messageText) return;
+
+    if (!username) {
+      setModalOpen(true);
+      return;
+    }
+
+    sendMessage(username, messageText);
+    setMessageText('');
+  };
 
   return (
     <>
@@ -43,6 +60,7 @@ const Footer = () => {
               placeholder={'Сообщение'}
               value={messageText}
               onChange={(event) => setMessageText(event.target.value)}
+              onKeyDown={(event) => handleInputEnter(event)}
             />
             <div className='footer__text-line' />
           </div>

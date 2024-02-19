@@ -11,7 +11,7 @@ const Content = () => {
   const webSocketManager = new WebSocketManager();
 
   useEffect(() => {
-    webSocketManager.connect('ws://');
+    webSocketManager.connect('ws://192.168.0.0');
 
     const handleMessage = (data: MessageStruct) => {
       setMessages([...messages, data]);
@@ -40,9 +40,25 @@ const Content = () => {
     webSocketManager.send(message);
   };
 
+  const receiveMessage = () => {
+    const message: MessageStruct = {
+      username: 'Romanlock',
+      time: new Date().getTime(),
+      payload: {
+        data: 'ПриветПриветПриветПриветПриветПриветПривет',
+        status: 'ok',
+        message: '',
+        fromMe: Boolean(Math.round(Math.random())),
+      },
+    };
+
+    setMessages([...messages, message]);
+  };
+
   return (
     <main id='main'>
-      <button onClick={sendMessage} />
+      <button onClick={sendMessage}>send</button>
+      <button onClick={receiveMessage}>receive</button>
       <div id='messenger_history'>
         {messages.map((message: MessageStruct, index: number) => (
           <Message
