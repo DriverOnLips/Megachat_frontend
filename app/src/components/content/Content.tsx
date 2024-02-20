@@ -1,74 +1,71 @@
 import { useEffect, useState } from 'react';
 
 import './Content.css';
-import { MessageStruct } from '../../structures/structures';
+import { SendMessageStruct } from '../../structures/structures';
 import Message from '../UI/message/Message';
 import { WebSocketManager } from '../../utils/websocket/webSocket';
 
 const Content = () => {
-  const [messages, setMessages] = useState<Array<MessageStruct>>([]);
+	const [messages, setMessages] = useState<Array<MessageStruct>>([]);
 
-  const webSocketManager = new WebSocketManager();
+	const webSocketManager = new WebSocketManager();
 
-  useEffect(() => {
-    webSocketManager.connect('ws://192.168.0.0');
+	useEffect(() => {
+		webSocketManager.connect('ws://192.168.207.1:8800/ws');
 
-    const handleMessage = (data: MessageStruct) => {
-      setMessages([...messages, data]);
-    };
+		const handleMessage = (data: any) => {
+			setMessages([...messages, data]);
+		};
 
-    webSocketManager.addListener(handleMessage);
+		webSocketManager.addListener(handleMessage);
 
-    return () => {
-      webSocketManager.removeListener(handleMessage);
-      webSocketManager.disconnect();
-    };
-  }, []);
+		return () => {
+			webSocketManager.removeListener(handleMessage);
+			webSocketManager.disconnect();
+		};
+	}, []);
 
-  const sendMessage = () => {
-    const message: MessageStruct = {
-      username: 'Romanlock',
-      time: new Date().getTime(),
-      payload: {
-        data: 'ПриветПриветПриветПриветПриветПриветПривет',
-        status: 'ok',
-        message: '',
-        fromMe: Boolean(Math.round(Math.random())),
-      },
-    };
+	const sendMessage = () => {
+		const message: MessageStruct = {
+			username: 'Romanlock',
+			time: new Date().getTime(),
+			payload: {
+				data: 'ПриветПриветПриветПриветПриветПриветПривет',
+				status: 'ok',
+				message: '',
+				fromMe: Boolean(Math.round(Math.random())),
+			},
+		};
 
-    webSocketManager.send(message);
-  };
+		webSocketManager.send(message);
+	};
 
-  const receiveMessage = () => {
-    const message: MessageStruct = {
-      username: 'Romanlock',
-      time: new Date().getTime(),
-      payload: {
-        data: 'ПриветПриветПриветПриветПриветПриветПривет',
-        status: 'ok',
-        message: '',
-        fromMe: Boolean(Math.round(Math.random())),
-      },
-    };
+	const receiveMessage = () => {
+		const message: MessageStruct = {
+			username: 'Romanlock',
+			time: new Date().getTime(),
+			payload: {
+				data: 'ПриветПриветПриветПриветПриветПриветПривет',
+				status: 'ok',
+				message: '',
+				fromMe: Boolean(Math.round(Math.random())),
+			},
+		};
 
-    setMessages([...messages, message]);
-  };
+		setMessages([...messages, message]);
+	};
 
-  return (
-    <main id='main'>
-      <button onClick={sendMessage}>send</button>
-      <button onClick={receiveMessage}>receive</button>
-      <div id='messenger_history'>
-        {messages.map((message: MessageStruct, index: number) => (
-          <Message
-            key={index}
-            message={message}
-          />
-        ))}
-      </div>
-    </main>
-  );
+	return (
+		<main id='main'>
+			<button onClick={sendMessage}>send</button>
+			<button onClick={receiveMessage}>receive</button>
+			<div id='messenger_history'>
+				{messages.map((message: MessageStruct, index: number) => (
+					<Message key={index} message={message} />
+				))}
+			</div>
+		</main>
+	);
 };
 
 export default Content;
