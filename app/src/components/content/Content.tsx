@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 import './Content.css';
 import { MessageClass } from '../../structures/message';
@@ -11,6 +11,7 @@ import { useMessage } from '../../hooks/useMessage';
 
 const Content = () => {
 	const { messages, addReceivedMessage, updateMessage } = useMessage();
+	const messengerHistoryRef = useRef<HTMLDivElement>(null);
 
 	const webSocketManager = new WebSocketManager();
 
@@ -45,11 +46,18 @@ const Content = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (messengerHistoryRef.current) {
+			messengerHistoryRef.current.scrollTop =
+				messengerHistoryRef.current.scrollHeight;
+		}
+	}, [messages]);
+
 	useEffect(() => {}, [messages]);
 
 	return (
 		<main id='main'>
-			<div id='messenger_history'>
+			<div id='messenger_history' ref={messengerHistoryRef}>
 				{messages.map((message: MessageClass, index: number) => (
 					<Message key={index} message={message} />
 				))}
