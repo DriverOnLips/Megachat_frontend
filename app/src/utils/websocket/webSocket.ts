@@ -1,3 +1,5 @@
+import { SendMessageClass } from '../../structures/sendMessage';
+
 export class WebSocketManager {
   private static instance: WebSocketManager | null = null;
   private socket: WebSocket | null = null;
@@ -28,7 +30,7 @@ export class WebSocketManager {
     this.listeners = this.listeners.filter((l) => l !== listener);
   }
 
-  public send(data: any): void {
+  public send(data: SendMessageClass): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(data));
     }
