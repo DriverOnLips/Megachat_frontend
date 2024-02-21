@@ -14,7 +14,6 @@ export const AppSlice = createSlice({
   reducers: {
     SetUsername: (state, action: PayloadAction<string>) => {
       state.username = action.payload;
-      console.log(state.username);
     },
   },
 });

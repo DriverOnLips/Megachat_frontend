@@ -9,6 +9,7 @@
   align-items: center;
   justify-content: center;
   z-index: 4;
+  background-color: white;
 }
 
 #footer img {

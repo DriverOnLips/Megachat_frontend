@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Message.css';
-import { MessageStruct } from '../../../structures/structures';
+import { MessageClass } from '../../../structures/message';
 import { createImageWithInitials } from '../../../utils/generateAvatar/generateAvatar';
 
-const Message: React.FC<{ message: MessageStruct }> = ({ message }) => {
+const Message: React.FC<{ message: MessageClass }> = ({ message }) => {
   const [imgData, setImgData] = useState('');
   const [time, setTime] = useState('');
 
@@ -23,7 +23,13 @@ const Message: React.FC<{ message: MessageStruct }> = ({ message }) => {
             <span className='message__username text-base3-bold'>
               {message.username}
             </span>
-            <span className='message__text text-base2-medium'>
+            <span
+              className='message__text text-base2-medium'
+              style={{
+                fontStyle:
+                  message.payload.status === 'error' ? 'italic' : 'normal',
+              }}
+            >
               {message.payload.data}
             </span>
             <div className='message__meta'>
@@ -85,7 +91,13 @@ const Message: React.FC<{ message: MessageStruct }> = ({ message }) => {
           <span className='message__username text-base3-bold'>
             {message.username}
           </span>
-          <span className='message__text text-base2-medium'>
+          <span
+            className='message__text text-base2-medium'
+            style={{
+              fontStyle:
+                message.payload.status === 'error' ? 'italic' : 'normal',
+            }}
+          >
             {message.payload.data}
           </span>
           <div className='message__meta'>

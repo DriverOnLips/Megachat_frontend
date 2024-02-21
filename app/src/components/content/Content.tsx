@@ -1,33 +1,53 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import './Content.css';
-import { MessageStruct } from '../../structures/structures';
+import { MessageClass } from '../../structures/message';
 import Message from '../UI/message/Message';
+import { WebSocketManager } from '../../utils/websocket/webSocket';
+import { convertSocketMessage } from '../../structures/convertSocketMessage';
+import { ReceiveMessageClass } from '../../structures/receiveMessage';
+import { ResponseMessageClass } from '../../structures/responseMessage';
+import { useMessage } from '../../hooks/useMessage';
 
 const Content = () => {
-  const [messages, setMessages] = useState<Array<MessageStruct>>([]);
+  const { messages, addReceivedMessage, updateMessage } = useMessage();
 
-  const addMessage = () => {
-    const message: MessageStruct = {
-      username: 'Romanlock',
-      time: new Date().getTime(),
-      payload: {
-        data: 'ПриветПриветПриветПриветПриветПриветПривет',
-        status: 'ok',
-        message: '',
-        fromMe: Boolean(Math.round(Math.random())),
-      },
+  const webSocketManager = new WebSocketManager();
+
+  useEffect(() => {
+    webSocketManager.connect('ws://192.168.207.1:8800/ws');
+
+    const handleMessage = (data: any) => {
+      const socketMessage = convertSocketMessage(data);
+
+      switch (true) {
+        case socketMessage instanceof ReceiveMessageClass: {
+          addReceivedMessage(socketMessage);
+          break;
+        }
+        case socketMessage instanceof ResponseMessageClass: {
+          updateMessage(socketMessage);
+          break;
+        }
+        default:
+          break;
+      }
     };
-    setMessages([...messages, message]);
-  };
+
+    webSocketManager.addListener(handleMessage);
+
+    return () => {
+      webSocketManager.removeListener(handleMessage);
+      webSocketManager.disconnect();
+    };
+  }, []);
 
   useEffect(() => {}, [messages]);
 
   return (
     <main id='main'>
-      <button onClick={addMessage} />
       <div id='messenger_history'>
-        {messages.map((message: MessageStruct, index: number) => (
+        {messages.map((message: MessageClass, index: number) => (
           <Message
             key={index}
             message={message}
