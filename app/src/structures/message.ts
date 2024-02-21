@@ -1,3 +1,5 @@
+import { SendMessageClass } from './sendMessage';
+
 interface MessagePayloadStruct {
   data: string;
   status: string;
@@ -21,5 +23,18 @@ export class MessageClass {
     this.username = username;
     this.time = time;
     this.payload = payload;
+  }
+
+  /**
+   * toSendMessageClass
+   */
+  public toSendMessageClass() {
+    return new SendMessageClass({
+      username: this.username,
+      time: this.time,
+      payload: {
+        data: this.payload.data,
+      },
+    });
   }
 }

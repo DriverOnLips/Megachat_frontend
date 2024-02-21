@@ -4,12 +4,17 @@ import './Footer.css';
 import { sendMessage } from '../../utils/sendMessage/sendMessage';
 import Modal from '../UI/modal/Modal';
 import { useApp } from '../../hooks/useApp';
+import { MessageClass } from '../../structures/message';
+import { useMessage } from '../../hooks/useMessage';
 
 const Footer = () => {
   const { username } = useApp();
+  const { addSendedMessage } = useMessage();
 
   const [messageText, setMessageText] = useState<string>('');
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
+
+  useEffect(() => {}, [messageText, isModalOpen]);
 
   const sendMessageHandler = () => {
     if (!messageText) return;
@@ -19,22 +24,27 @@ const Footer = () => {
       return;
     }
 
-    sendMessage(username, messageText);
+    const messageToSend = {
+      username,
+      time: new Date().getTime(),
+      payload: {
+        data: messageText,
+        status: 'wait',
+        fromMe: true,
+      },
+    };
+
+    const message = new MessageClass(messageToSend);
+
+    addSendedMessage(message);
+    sendMessage(message);
     setMessageText('');
   };
 
-  useEffect(() => {}, [messageText, isModalOpen]);
-
   const handleInputEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key != 'Enter' || !messageText) return;
+    if (event.key != 'Enter') return;
 
-    if (!username) {
-      setModalOpen(true);
-      return;
-    }
-
-    sendMessage(username, messageText);
-    setMessageText('');
+    sendMessageHandler();
   };
 
   return (

@@ -1,18 +1,8 @@
-import { SendMessageClass } from '../../structures/sendMessage';
+import { MessageClass } from '../../structures/message';
 import { WebSocketManager } from '../websocket/webSocket';
 
-export const sendMessage = (username: string, messageText: string) => {
+export const sendMessage = (message: MessageClass) => {
   const webSockerManager = new WebSocketManager();
 
-  const messageData = {
-    username,
-    time: new Date().getTime(),
-    payload: {
-      data: messageText,
-    },
-  };
-
-  const message = new SendMessageClass(messageData);
-
-  webSockerManager.send(message);
+  webSockerManager.send(message.toSendMessageClass());
 };

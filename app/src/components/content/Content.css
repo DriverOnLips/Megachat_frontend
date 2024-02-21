@@ -1,5 +1,5 @@
 #main {
-  height: calc(100vh - 60px - 50px);
+  height: calc(100vh - 60px - 80px);
   width: 100%;
   padding-top: 60px;
 }
@@ -9,6 +9,8 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  padding: 1rem 0;
   background-image: url(../../assets/img/background.svg);
   gap: 0.5rem;
+  overflow-y: auto;
 }

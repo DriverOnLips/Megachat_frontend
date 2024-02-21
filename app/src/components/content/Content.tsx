@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import './Content.css';
 import { MessageClass } from '../../structures/message';
@@ -7,9 +7,10 @@ import { WebSocketManager } from '../../utils/websocket/webSocket';
 import { convertSocketMessage } from '../../structures/convertSocketMessage';
 import { ReceiveMessageClass } from '../../structures/receiveMessage';
 import { ResponseMessageClass } from '../../structures/responseMessage';
+import { useMessage } from '../../hooks/useMessage';
 
 const Content = () => {
-  const [messages, setMessages] = useState<Array<MessageClass>>([]);
+  const { messages, addReceivedMessage, updateMessage } = useMessage();
 
   const webSocketManager = new WebSocketManager();
 
@@ -21,27 +22,11 @@ const Content = () => {
 
       switch (true) {
         case socketMessage instanceof ReceiveMessageClass: {
-          const message = socketMessage.toMessageClass();
-          setMessages([...messages, message]);
-
+          addReceivedMessage(socketMessage);
           break;
         }
         case socketMessage instanceof ResponseMessageClass: {
-          const messageToUpdateIndex = messages.findIndex(
-            (msg) => msg.time === socketMessage.time
-          );
-          if (messageToUpdateIndex === -1) return;
-
-          const updatedMessage = socketMessage.toMessageClass(
-            messages[messageToUpdateIndex].payload.data
-          );
-
-          setMessages([
-            ...messages.slice(0, messageToUpdateIndex),
-            updatedMessage,
-            ...messages.slice(messageToUpdateIndex + 1),
-          ]);
-
+          updateMessage(socketMessage);
           break;
         }
         default:
@@ -56,6 +41,8 @@ const Content = () => {
       webSocketManager.disconnect();
     };
   }, []);
+
+  useEffect(() => {}, [messages]);
 
   return (
     <main id='main'>
