@@ -10,52 +10,52 @@ import { ResponseMessageClass } from '../../structures/responseMessage';
 import { useMessage } from '../../hooks/useMessage';
 
 const Content = () => {
-  const { messages, addReceivedMessage, updateMessage } = useMessage();
+	const { messages, addReceivedMessage, updateMessage } = useMessage();
 
-  const webSocketManager = new WebSocketManager();
+	const webSocketManager = new WebSocketManager();
 
-  useEffect(() => {
-    webSocketManager.connect('ws://192.168.207.1:8800/ws');
+	useEffect(() => {
+		webSocketManager.connect('ws://192.168.143.1:8800/ws');
 
-    const handleMessage = (data: any) => {
-      const socketMessage = convertSocketMessage(data);
+		const handleMessage = (data: any) => {
+			const socketMessage = convertSocketMessage(data);
 
-      switch (true) {
-        case socketMessage instanceof ReceiveMessageClass: {
-          addReceivedMessage(socketMessage);
-          break;
-        }
-        case socketMessage instanceof ResponseMessageClass: {
-          updateMessage(socketMessage);
-          break;
-        }
-        default:
-          break;
-      }
-    };
+			switch (true) {
+				case socketMessage instanceof ReceiveMessageClass: {
+					addReceivedMessage(socketMessage);
+					console.log('receive');
+					break;
+				}
+				case socketMessage instanceof ResponseMessageClass: {
+					updateMessage(socketMessage);
+					console.log('responce');
+					break;
+				}
+				default:
+					console.log('null');
+					break;
+			}
+		};
 
-    webSocketManager.addListener(handleMessage);
+		webSocketManager.addListener(handleMessage);
 
-    return () => {
-      webSocketManager.removeListener(handleMessage);
-      webSocketManager.disconnect();
-    };
-  }, []);
+		return () => {
+			webSocketManager.removeListener(handleMessage);
+			webSocketManager.disconnect();
+		};
+	}, []);
 
-  useEffect(() => {}, [messages]);
+	useEffect(() => {}, [messages]);
 
-  return (
-    <main id='main'>
-      <div id='messenger_history'>
-        {messages.map((message: MessageClass, index: number) => (
-          <Message
-            key={index}
-            message={message}
-          />
-        ))}
-      </div>
-    </main>
-  );
+	return (
+		<main id='main'>
+			<div id='messenger_history'>
+				{messages.map((message: MessageClass, index: number) => (
+					<Message key={index} message={message} />
+				))}
+			</div>
+		</main>
+	);
 };
 
 export default Content;
