@@ -57,9 +57,15 @@ const Content = () => {
 
 	return (
 		<main id='main'>
-			<div id='messenger_history' ref={messengerHistoryRef}>
+			<div
+				id='messenger_history'
+				ref={messengerHistoryRef}
+			>
 				{messages.map((message: MessageClass, index: number) => (
-					<Message key={index} message={message} />
+					<Message
+						key={index}
+						message={message}
+					/>
 				))}
 			</div>
 		</main>
