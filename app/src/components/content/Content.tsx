@@ -16,7 +16,7 @@ const Content = () => {
 	const webSocketManager = new WebSocketManager();
 
 	useEffect(() => {
-		webSocketManager.connect('ws://192.168.143.1:8800/ws');
+		webSocketManager.connect('ws://172.16.82.155:8800/ws');
 
 		const handleMessage = (data: any) => {
 			const socketMessage = convertSocketMessage(data);
